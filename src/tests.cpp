@@ -3,7 +3,7 @@
 #include "hex_encode_utils.h"
 #include "timer.h"
 
-#include "../phc-winner-argon2/src/core.h"
+#include "aquahash/core.h"
 
 #include <assert.h>
 #include <inttypes.h>

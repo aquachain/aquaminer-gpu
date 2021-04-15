@@ -1,0 +1,6 @@
+[submodule "aquahash"]
+	path = aquahash
+	url = git@github.com:aquachain/aquahash.git
+[submodule "curl"]
+	path = curl
+	url = https://github.com/curl/curl.git

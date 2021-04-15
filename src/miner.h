@@ -6,7 +6,7 @@
 #include <string>
 #include <stdint.h>
 #include <gmp.h>
-#include <argon2.h>
+#include <aquahash.h>
 #include <assert.h>
 
 // size of the hash that argon2i / argon2id will generate

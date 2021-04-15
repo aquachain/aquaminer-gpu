@@ -13,7 +13,7 @@
 #endif
 #include "hex_encode_utils.h"
 
-#include "../blake2/sse/blake2-config.h"
+#include "blake2-config.h"
 
 #include <assert.h>
 #include <openssl/rand.h>
@@ -28,7 +28,7 @@
 #include <cstring>
 #include <stdio.h>
 
-#include <argon2.h>
+#include <aquahash.h>
 
 #ifdef _MSC_VER
 	// need to add those libs for windows static linking

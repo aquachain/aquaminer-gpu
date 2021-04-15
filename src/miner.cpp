@@ -25,7 +25,6 @@
 #include <chrono>
 //#include <unistd.h>
 
-#include <argon2.h>
 #include <CL/cl.h>
 using namespace rapidjson;
 using std::chrono::high_resolution_clock;
