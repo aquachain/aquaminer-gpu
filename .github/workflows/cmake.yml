@@ -47,10 +47,10 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: aquaminer-gpu
-        path: ${{github.workspace}}/build-gpu/aquaminer-gpu
+        path: ${{github.workspace}}/build-gpu/aquacppminer-gpu
 
     - name: Archive code coverage results
       uses: actions/upload-artifact@v2
       with:
         name: aquaminer-cpu
-        path: ${{github.workspace}}/build-cpu/aquaminer-gpu
+        path: ${{github.workspace}}/build-cpu/aquacppminer-gpu
