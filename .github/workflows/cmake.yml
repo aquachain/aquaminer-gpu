@@ -2,9 +2,9 @@ name: CMake
 
 on:
   push:
-    branches: [ linux, feat/ci-build-gpu-cpu ]
+    branches: [ linux ]
   pull_request:
-    branches: [ linux, feat/ci-build-gpu-cpu ]
+    branches: [ linux ]
 
 env:
   BUILD_TYPE: Release
@@ -15,13 +15,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
-    - name: Cache Cuda Installer 11-5-1
-      id: cache-cuda-installer-11-5-1
-      uses: actions/cache@v2
-      with:
-        path: /opt/hostedtoolcache/cuda_installer-linux/11.5.1/x64/
-        key: ${{ runner.os }}-cuda_installer-11-5-1
 
     - uses: Jimver/cuda-toolkit@v0.2.5
       id: cuda-toolkit
