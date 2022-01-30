@@ -14,12 +14,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@v2
+
     - uses: Jimver/cuda-toolkit@v0.2.5
       id: cuda-toolkit
       with:
         cuda: '11.5.1'
 
-    - uses: actions/checkout@v2
+    - name: Update submodules
+      run: git submodule update --init
 
     - name: Configure CMake GPU
       run: cmake -B ${{github.workspace}}/build-gpu -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}  -DWITH_GPU=ON
