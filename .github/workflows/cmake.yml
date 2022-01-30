@@ -1,0 +1,34 @@
+name: CMake
+
+on:
+  push:
+    branches: [ linux ]
+  pull_request:
+    branches: [ linux ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: Jimver/cuda-toolkit@v0.2.5
+      id: cuda-toolkit
+      with:
+        cuda: '11.5.1'
+
+    - uses: actions/checkout@v2
+
+    - name: Configure CMake GPU
+      run: cmake -B ${{github.workspace}}/build-gpu -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}  -DWITH_GPU=ON
+
+    - name: Build GPU
+      run: cmake --build ${{github.workspace}}/build-gpu --config ${{env.BUILD_TYPE}}
+
+    - name: Configure CMake CPU
+      run: cmake -B ${{github.workspace}}/build-cpu -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}  -DWITH_GPU=OFF
+
+    - name: Build GPU
+      run: cmake --build ${{github.workspace}}/build-cpu --config ${{env.BUILD_TYPE}}
