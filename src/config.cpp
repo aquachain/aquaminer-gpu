@@ -120,7 +120,7 @@ bool createConfigFile(std::string &log) {
 		std::cout << 
 			(newCfg.soloMine ?
 				"Enter node url (ex: http://127.0.0.1:8543)" :
-				"Enter pool url (ex: http://pool.aquachain-foundation.org:8888/0x1d23de...)")
+				"Enter pool url (ex: http://<pool>:8888/0x1d23de...)")
 				<< ", if empty, will pool mine to dev wallet): " << std::endl;
 		std::getline(std::cin, newCfg.getWorkUrl);
 		newCfg.getWorkUrl = trim(newCfg.getWorkUrl);
@@ -159,7 +159,7 @@ bool createConfigFile(std::string &log) {
 		else {
 			int nThreads = 0;
 			nThreadsOk = sscanf(nThreadsStr.c_str(), "%d", &nThreads) == 1;
-			if (nThreads >= 0) {
+			if (nThreadsOk && nThreads >= 0) {
 				newCfg.nThreads = (uint32_t)nThreads;
 			}
 			else {
