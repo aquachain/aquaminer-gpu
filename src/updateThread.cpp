@@ -292,22 +292,6 @@ void updateThreadFn() {
 		std::chrono::duration<float> durationSinceLast = tNow - tStart;
 		bool recomputeHashRate = false;
 
-		// // get work on alt pool
-		// if (solo) {
-		// 	WorkParams newWorkF;
-		// 	MiningConfig cfgF = miningConfig();
-		// 	cfgF.getWorkUrl = cfgF.submitWorkUrl2;
-		// 	bool ok = requestPoolParams(cfgF, newWorkF, false);
-		// 	if (ok && s_altWorkParams.hash != newWorkF.hash) {
-		// 		s_workParams_mutex.lock();
-		// 		{
-		// 			s_altWorkParams = newWorkF;
-		// 		}
-		// 		s_workParams_mutex.unlock();
-		// 		s_poolGetWorkCount++;
-		// 	}
-		// }
-
 		// call aqua_getWork on node / pool
 		bool ok = requestPoolParams(miningConfig(), newWork, true);
 		if (!ok) {
