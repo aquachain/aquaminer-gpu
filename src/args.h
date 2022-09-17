@@ -24,7 +24,7 @@ const std::string s_usageMsg =
 "  -n node_url    : optional node url, to get more stats (pool mining only)\n"
 "  -r rate        : pool refresh rate, ex: 3s, 2.5m, default is 3s\n"
 "  --solo         : solo mining, -F needs to be the node url\n"
-"  --proxy        : proxy to use, ex: --proxy socks5://127.0.0.1:9150"
+"  --proxy        : proxy to use, ex: --proxy socks5://127.0.0.1:9150\n"
 "  --argon x,y,z  : use specific argon params (ex: 4,512,1), skip shares submit if incompatible with HF7\n"
 "  --submit       : when used with --argon, forces submitting shares to pool/node\n"
 "  -h             : display this help message and exit\n"
