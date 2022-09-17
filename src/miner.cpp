@@ -435,8 +435,10 @@ int r() {
 	return r;
 }
 
-bool hash(const WorkParams& p, mpz_t mpz_result, uint64_t nonce, Argon2_Context &ctx)
+bool hash(const WorkParams& p, mpz_t mpz_result, uint64_t nonce, Argon2_Context &ctx, bool do_submit)
 {
+	if (!do_submit) {
+		
 	// update the seed with the new nonce
 	updateAquaSeed(nonce, s_seed);
 
@@ -453,10 +455,12 @@ bool hash(const WorkParams& p, mpz_t mpz_result, uint64_t nonce, Argon2_Context 
 	mpz_fromBytesNoInit(ctx.out, ctx.outlen, mpz_result);
 
 	//
-	bool needSubmit = mpz_cmp(mpz_result, p.mpz_target) < 0;
+	do_submit = mpz_cmp(mpz_result, p.mpz_target) < 0;
+	
+	}
 
 	// compare to target
-	if (needSubmit) {
+	if (do_submit) {
 		if (miningConfig().soloMine) {
 			// for solo mining we do a synchronous submit ASAP
 			submitThreadFn(s_nonce, p.hash, s_minerThreadID);
@@ -740,9 +744,9 @@ void minerThreadFn(int minerID)
 				generateAquaSeed(s_nonce, prms.hash, s_seed);
 				// save current hash in TLS
 				strcpy(s_currentWorkHash, prms.hash.c_str());
-#if DEBUG_NONCES
-				logLine(s_logPrefix, "new work starting nonce: %s", nonceToString(s_nonce).c_str());
-#endif
+// #if DEBUG_NONCES
+// 				logLine(s_logPrefix, "new work starting nonce: %s", nonceToString(s_nonce).c_str());
+// #endif
 			}
 			else {
 				if (s_minerThreadsInfo[minerID].needRegenSeed) {
@@ -753,24 +757,24 @@ void minerThreadFn(int minerID)
 					s_nonce = makeAquaNonce();
                 
 					s_minerThreadsInfo[minerID].needRegenSeed = false;
-#if DEBUG_NONCES
-					logLine(s_logPrefix, "regen nonce after reject: %s", nonceToString(s_nonce).c_str());
-#endif
+// #if DEBUG_NONCES
+// 					logLine(s_logPrefix, "regen nonce after reject: %s", nonceToString(s_nonce).c_str());
+// #endif
 					// wait for update thread to get new work
 					if (!solo) {
-#define WAIT_NEW_WORK_AFTER_REJECT (1)
-#if (WAIT_NEW_WORK_AFTER_REJECT == 0)
-						logLine(s_logPrefix, "regenerated nonce after a reject, not waiting for pool to send new work !");
-#else
-						logLine(s_logPrefix, "Thread stopped mining because last share rejected, waiting for new work from pool");
-						while (1) {
-							if (getPoolGetWorkCount() != getWorkCountOfRejectedShare) {
-								break;
-							}
-							std::this_thread::sleep_for(std::chrono::seconds(5));
-						}
-						logLine(s_logPrefix, "Thread resumes mining");
-#endif
+// #define WAIT_NEW_WORK_AFTER_REJECT (1)
+// #if (WAIT_NEW_WORK_AFTER_REJECT == 0)
+// 						logLine(s_logPrefix, "regenerated nonce after a reject, not waiting for pool to send new work !");
+// #else
+// 						logLine(s_logPrefix, "Thread stopped mining because last share rejected, waiting for new work from pool");
+// 						while (1) {
+// 							if (getPoolGetWorkCount() != getWorkCountOfRejectedShare) {
+// 								break;
+// 							}
+// 							std::this_thread::sleep_for(std::chrono::seconds(5));
+// 						}
+// 						logLine(s_logPrefix, "Thread resumes mining");
+// #endif
 					}
 				}
 				else {
@@ -810,7 +814,7 @@ void minerThreadFn(int minerID)
 			clSetKernelArg(clState->kernel[0], 2, sizeof(uint64_t), &(s_nonce));
 
 			//fill - search 1
-			size_t bufferSize = 32 * 8 * 1 * sizeof(cl_uint) * 2;
+			size_t bufferSize = 32 * 8 * 1 * sizeof(cl_uint) * 1;
 			uint32_t passes = 1;
 			uint32_t lanes = 1;
 			uint32_t segment_blocks = 2;
@@ -870,21 +874,24 @@ void minerThreadFn(int minerID)
 			check_clEnqueueReadBuffer(clState->commandQueue, clState->outputBuffer,
 				CL_TRUE,                // cl_bool blocking_read
 				0,                      // size_t offset
-				sizeof(uint64_t) * 1,	// size_t size
+				sizeof(uint64_t) * 2,	// size_t size
 				pnonces,                 // void *ptr
 				0,                      // cl_uint num_events_in_wait_list
 				NULL,                   // cl_event *event_wait_list
 				NULL);
 
-		//	printf("coming out of the opengl %llx target: %llx \n", pnonces[0], le_target);
-
+			// printf("coming out of the opengl %llx target: %llx \n", pnonces[0], le_target);
+		// printf("hi\n");
 		if (pnonces[0] != 0xffffffffffffffff)
 		{
-				//printf("winning nonce = %llx \n", pnonces[0]);
+				// printf("winning nonce = thr=%d: %llx \n", minerID, pnonces[0]);
 			//	pnonces[0] = s_nonce;// &0xffffffff00000000ull;
 			s_nonce = pnonces[0]; // += 0x1fffff12;
 			//	printf("s_nonce = %llx \n", pnonces[0]);
-				bool hashOk = hash(prms, mpz_result, s_nonce, s_ctx);
+				bool hashOk = hash(prms, mpz_result, s_nonce, s_ctx, true);
+				if (!hashOk) {
+					printf("hash not ok?");
+				}
 
 		}
 				s_nonce += throughput;
@@ -899,12 +906,14 @@ void minerThreadFn(int minerID)
 
 void startMinerThreads(int nThreads)
 {
-	assert(nThreads > 0);
+	if (nThreads != 0) {
+
 	assert(s_minerThreads.size() == 0);
 	s_minerThreads.resize(nThreads);
 	s_minerThreadsInfo.resize(nThreads);
 	for (int i = 0; i < nThreads; i++) {
 		s_minerThreads[i] = new std::thread(minerThreadFn, i);
+	}
 	}
 }
 

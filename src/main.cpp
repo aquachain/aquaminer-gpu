@@ -5,7 +5,6 @@
 #include "args.h"
 #include "log.h"
 #include "config.h"
-#include "kbhit.h"
 #include "getPwd.h"
 #ifdef _MSC_VER
 #include "windows/procinfo_windows.h"
@@ -53,8 +52,8 @@ const std::string ARGON_ARCH = "";
 
 using std::chrono::high_resolution_clock;
 
-const char* COORDINATOR_LOG_PREFIX = "MAIN";
-const std::string VERSION = "1.3.1";
+const char* COORDINATOR_LOG_PREFIX = "AQUA";
+const std::string VERSION = "1.3.2";
 
 bool s_needKeyPressAtEnd = false;
 bool s_run = true;
@@ -302,12 +301,5 @@ int main(int argc, char** argv) {
 	ERR_free_strings();
 
 	logLine(COORDINATOR_LOG_PREFIX, "Goodbye !");
-
-	if (s_needKeyPressAtEnd) {
-		printf("Press any key to exit...");
-		while (!kbhit()) {
-		}
-	}
-
 	return 0;
 }
