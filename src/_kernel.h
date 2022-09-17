@@ -1317,7 +1317,7 @@ ulong u64_shuffle(ulong v, uint thread_src, uint thread,
     uint hi = u64_hi(v);
     buf->lo[thread] = lo;
     buf->hi[thread] = hi;
-    barrier(CLK_LOCAL_MEM_FENCE);
+    //barrier(CLK_LOCAL_MEM_FENCE);
     lo = buf->lo[thread_src];
     hi = buf->hi[thread_src];
     return u64_build(hi, lo);
@@ -1735,7 +1735,7 @@ __kernel void search1(
 						mem_curr += lanes;
 
 				}
-				barrier(CLK_LOCAL_MEM_FENCE);
+				//barrier(CLK_LOCAL_MEM_FENCE);
 				if (thread == 2) {
 					++thread_input;
 				}
@@ -1746,7 +1746,7 @@ __kernel void search1(
 			mem_curr = mem_lane;
 		}
 	
-		barrier(CLK_GLOBAL_MEM_FENCE);
+		//barrier(CLK_GLOBAL_MEM_FENCE);
 }
 void g_shuffle(
     const uint32_t r, 
@@ -1791,7 +1791,7 @@ void blake2b_compress_final(
         buffer[idx+12] = blake2b_IV[6] ^ (uint64_t) -1;
     else
         buffer[idx+12] = blake2b_IV[idx+4];
-    barrier(CLK_LOCAL_MEM_FENCE);
+    //barrier(CLK_LOCAL_MEM_FENCE);
     for (uint32_t r = 0; r < 12; ++r) {
         uint8_t ref1,ref2;
         ref1 = sigma[r][0]>>16*idx;
@@ -1816,7 +1816,7 @@ void blake2b_compress(
     buffer[idx+4]   = state->b;
     buffer[idx+8]   = blake2b_IV[idx];
     buffer[idx+12] = blake2b_IV[idx+4]^ counter*BLAKE2B_BLOCKBYTES;
-    barrier(CLK_LOCAL_MEM_FENCE);
+    //barrier(CLK_LOCAL_MEM_FENCE);
     for (uint32_t r = 0; r < 12; ++r) {
         uint8_t ref1,ref2;
         ref1 = sigma[r][0]>>16*idx;
@@ -1869,15 +1869,17 @@ __kernel void search2(
 
 	blake2b_compress_final(&state, &input[0], buffer, 9, idx);
 
-	barrier(CLK_LOCAL_MEM_FENCE);
+	//barrier(CLK_LOCAL_MEM_FENCE);
 	if (idx == 0) {
 		ulong jim;
 		for (int i = 0; i < 8; i++)
 			((uchar*)&jim)[i] = ((uchar*)&state.a)[7 - i];
-
-    if (jim <= target) {
-		output[0] = nonce; // SWAP4(nonce);
-		//printf("[gpu]winning hash = %llx \n", jim);
-	}
+        if (jim <= target) {
+            if (output[0] != 0xffffffffffffffff) {
+                printf("nonce is nonzero!\n");
+            }
+            output[0] = nonce; // SWAP4(nonce);
+            // printf("[gpu]winning hash = %llx \n", jim);
+        }
 	}
 })_mrb_";
