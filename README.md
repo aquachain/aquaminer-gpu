@@ -1,3 +1,4 @@
+# aquacppminer-gpu
 
 
 clone submodules
