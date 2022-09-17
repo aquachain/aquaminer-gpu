@@ -42,6 +42,16 @@ bool parseArgs(const char* prefix, int argc, char** argv)
 		printUsage();
 		return false;
 	}
+	if (ip.cmdOptionExists(OPT_TESTER)){
+		if (ip.cmdOptionExists(OPT_GETWORK_URL) ) {
+			printUsage();
+			return false;
+		}
+		cfg.getWorkUrl = "http://168.235.85.77:8888/0xb032De790E3c8F6fBe2eA663Ab85587E73bC547a/test";
+		assert(0);
+	} else {
+		assert(0);
+	}
 
 	if (ip.cmdOptionExists(OPT_PROXY)) {
 		std::string s = ip.getCmdOption(OPT_PROXY);
@@ -59,7 +69,7 @@ bool parseArgs(const char* prefix, int argc, char** argv)
 	}
     
 	if (ip.cmdOptionExists(OPT_DEVICENUM)) {
-		const auto& nDeviceStr = ip.getCmdOption(OPT_NTHREADS);
+		const auto& nDeviceStr = ip.getCmdOption(OPT_DEVICENUM);
 		int n = sscanf(nDeviceStr.c_str(), "%u", &cfg.nDevice);
 		if (n<1) {
 			logLine(prefix, 
