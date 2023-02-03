@@ -1,7 +1,7 @@
-# aquacppminer-gpu
+# aquaminer-gpu
 
 
-clone submodules
+be sure to clone submodules
 
 ```
 git clone --branch linux --recurse-submodules https://github.com/aquachain/aquaminer-gpu

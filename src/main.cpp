@@ -139,7 +139,7 @@ int main(int argc, char** argv) {
 	// openssl initialization
 	ERR_load_crypto_strings();
 	OpenSSL_add_all_algorithms();
-	CONF_modules_load(NULL, "aquacppminer", 0);
+	CONF_modules_load(NULL, "aquaminer", 0);
 	RAND_poll();
 
 	// curl initialization

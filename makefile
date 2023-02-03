@@ -1,7 +1,9 @@
-bin/aquacppminer-gpu: src/*.cpp src/*.h
+bin/aquaminer-gpu: src/*.cpp src/*.h
 	mkdir -p bin
 	cmake -Bbuild
-	make -C build -j12 aquacppminer-gpu
-	mv build/aquacppminer-gpu bin/aquacppminer-gpu
-test: bin/aquacppminer-gpu
+	make -C build -j12 aquaminer-gpu
+	mv build/aquaminer-gpu $@
+install: bin/aquaminer-gpu
+	install $^ /usr/local/bin/
+test: bin/aquaminer-gpu
 	$^ -T

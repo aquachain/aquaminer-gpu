@@ -32,12 +32,12 @@ find_package(CURL REQUIRED)
 file(GLOB SRC src/*.cpp)
 file(GLOB HDR src/*.cpp)
 
-add_executable(aquacppminer-gpu
+add_executable(aquaminer-gpu
   ${SRC} ${HDR})
-target_compile_definitions(aquacppminer-gpu
+target_compile_definitions(aquaminer-gpu
   PUBLIC
   -DARCH="Linux64")
-target_link_libraries(aquacppminer-gpu
+target_link_libraries(aquaminer-gpu
   PUBLIC
   aquahash
   ${OpenCL_LIBRARIES}
@@ -45,7 +45,7 @@ target_link_libraries(aquacppminer-gpu
   ${CURL_LIBRARIES}
   gmp
   OpenSSL::SSL)
-target_include_directories(aquacppminer-gpu
+target_include_directories(aquaminer-gpu
   PUBLIC
   ${CURL_INCLUDE_DIRS}
   aquahash/include

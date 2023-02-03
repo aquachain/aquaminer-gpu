@@ -19,7 +19,7 @@ const std::string OPT_PROXY = "--proxy";
 const std::string OPT_ARGON_SUBMIT = "--submit";
 
 const std::string s_usageMsg =
-"aquacppminer.exe -F url [-t nThreads] [-n nodeUrl] [--solo] [-r refreshRate] [-h]\n"
+"aquaminer -F url [-t nThreads] [-n nodeUrl] [--solo] [-r refreshRate] [-h]\n"
 "  -F url         : url of pool or node to mine on, if not specified, will pool mine to dev's aquabase\n"
 "  -t nThreads    : number of threads to use (if not specified will use maximum logical threads available)\n"
 "  -d device_num  : gpu device to use\n"
