@@ -11,7 +11,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v2
@@ -32,11 +32,14 @@ jobs:
 
     - name: Build GPU
       run: cmake --build ${{github.workspace}}/build-gpu --config ${{env.BUILD_TYPE}}
+    - name: Package
+      run: cd ${{github.workspace}}/build-gpu && tar czf aquaminer-gpu-22.04.tar.gz aquaminer-gpu
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest-ubuntu-20.04"
+        automatic_release_tag: "latest-ubuntu-22.04"
         prerelease: true
-        title: "Development Build"
+        title: "Development Build 22.04"
         files: |
-          ${{github.workspace}}/build-gpu/aquaminer-gpu
+          ${{github.workspace}}/build-gpu/aquaminer-gpu-22.04.tar.gz
+
