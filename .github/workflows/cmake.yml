@@ -24,17 +24,20 @@ jobs:
     - name: Update submodules
       run: git submodule update --init
 
+    - name: Install libcurl
+      run: sudo apt install -y libcurl4-openssl-dev
+
     - name: Configure CMake GPU
       run: cmake -B ${{github.workspace}}/build-gpu -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}  -DWITH_GPU=ON
 
     - name: Build GPU
       run: cmake --build ${{github.workspace}}/build-gpu --config ${{env.BUILD_TYPE}}
 
-    - name: Configure CMake CPU
-      run: cmake -B ${{github.workspace}}/build-cpu -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}  -DWITH_GPU=OFF
+    # - name: Configure CMake CPU
+    #   run: cmake -B ${{github.workspace}}/build-cpu -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}  -DWITH_GPU=OFF
 
-    - name: Build CPU
-      run: cmake --build ${{github.workspace}}/build-cpu --config ${{env.BUILD_TYPE}}
+    # - name: Build CPU
+    #   run: cmake --build ${{github.workspace}}/build-cpu --config ${{env.BUILD_TYPE}}
 
     - name: Archive code coverage results
       uses: actions/upload-artifact@v2
@@ -42,8 +45,8 @@ jobs:
         name: aquaminer-gpu
         path: ${{github.workspace}}/build-gpu/aquacppminer-gpu
 
-    - name: Archive code coverage results
-      uses: actions/upload-artifact@v2
-      with:
-        name: aquaminer-cpu
-        path: ${{github.workspace}}/build-cpu/aquacppminer-gpu
+    # - name: Archive code coverage results
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: aquaminer-cpu
+    #     path: ${{github.workspace}}/build-cpu/aquacppminer-gpu
