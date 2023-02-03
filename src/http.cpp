@@ -100,7 +100,7 @@ bool httpPost(
 		if (s_proxy.size()) {
 			curl_easy_setopt(curlHandle, CURLOPT_PROXY, s_proxy.c_str());
 		}
-		curl_easy_setopt(curlHandle, CURLOPT_USERAGENT, "aquaminer-gpu/1.3.2");
+		curl_easy_setopt(curlHandle, CURLOPT_USERAGENT, "aquaminer-gpu/1.3.3");
 
 		curl_easy_setopt(curlHandle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
 		curl_easy_setopt(curlHandle, CURLOPT_WRITEDATA, (void *)&chunk);

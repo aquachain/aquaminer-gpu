@@ -53,7 +53,7 @@ const std::string ARGON_ARCH = "";
 using std::chrono::high_resolution_clock;
 
 const char* COORDINATOR_LOG_PREFIX = "AQUA";
-const std::string VERSION = "1.3.2";
+const std::string VERSION = "1.3.3";
 
 bool s_needKeyPressAtEnd = false;
 bool s_run = true;
