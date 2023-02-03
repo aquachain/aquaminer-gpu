@@ -39,14 +39,13 @@ jobs:
     # - name: Build CPU
     #   run: cmake --build ${{github.workspace}}/build-cpu --config ${{env.BUILD_TYPE}}
 
-    - name: Archive code coverage results
-      uses: actions/upload-artifact@v2
-      with:
-        name: aquaminer-gpu
-        path: ${{github.workspace}}/build-gpu/aquacppminer-gpu
-
-    # - name: Archive code coverage results
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     name: aquaminer-cpu
-    #     path: ${{github.workspace}}/build-cpu/aquacppminer-gpu
+    
+    - name: Upload Release
+      uses: "marvinpinto/action-automatic-releases@latest"
+            with:
+              repo_token: "${{ secrets.GITHUB_TOKEN }}"
+              automatic_release_tag: "latest"
+              prerelease: true
+              title: "Development Build"
+              files: |
+                ${{github.workspace}}/build-gpu/aquaminer-gpu
