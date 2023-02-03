@@ -32,20 +32,11 @@ jobs:
 
     - name: Build GPU
       run: cmake --build ${{github.workspace}}/build-gpu --config ${{env.BUILD_TYPE}}
-
-    # - name: Configure CMake CPU
-    #   run: cmake -B ${{github.workspace}}/build-cpu -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}  -DWITH_GPU=OFF
-
-    # - name: Build CPU
-    #   run: cmake --build ${{github.workspace}}/build-cpu --config ${{env.BUILD_TYPE}}
-
-    
-    - name: Upload Release
-      uses: "marvinpinto/action-automatic-releases@latest"
-            with:
-              repo_token: "${{ secrets.GITHUB_TOKEN }}"
-              automatic_release_tag: "latest"
-              prerelease: true
-              title: "Development Build"
-              files: |
-                ${{github.workspace}}/build-gpu/aquaminer-gpu
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
+        prerelease: true
+        title: "Development Build"
+        files: |
+          ${{github.workspace}}/build-gpu/aquaminer-gpu
